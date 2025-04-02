@@ -159,3 +159,14 @@ app.*.symbols
 .python-version
 .gclient_previous_custom_vars
 .gclient_previous_sync_commits
+
+build/
+.flutter/
+.dart_tool/
+
+# iOS 빌드 캐시 폴더 제외
+ios/Build/
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+ios/.symlinks/
+ios/Podfile.lock
