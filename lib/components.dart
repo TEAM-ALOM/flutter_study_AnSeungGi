@@ -1,7 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/button.dart';
 import 'package:flutter_app/quiz.dart';
 import 'package:flutter_app/textbox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Components extends StatefulWidget {
   const Components({super.key});
@@ -13,6 +15,7 @@ class Components extends StatefulWidget {
 class _ComponentsState extends State<Components> {
   //late Quiz quiz;
   Future<Quiz>? quiz;
+  
 
   @override
   void initState(){

@@ -170,3 +170,6 @@ ios/Flutter/flutter_export_environment.sh
 ios/Pods/
 ios/.symlinks/
 ios/Podfile.lock
+
+
+firepit-log.txt
