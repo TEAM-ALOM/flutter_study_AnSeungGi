@@ -6,6 +6,17 @@ class Quiz {
   List<String> answers = [];
   String coanswer = '';
   Quiz({required this.answers, required this.question, required this.coanswer});
+   Map<String, dynamic> toMap() {
+    return {
+      'question': question,
+      'answers': answers,
+      'coanswer': coanswer,
+    };
+  }
+  @override
+  String toString() {
+    return 'Quiz(question: $question, answers: $answers, coanswer: $coanswer)';
+  }
 }
 
 Future<Quiz> fetching() async {
