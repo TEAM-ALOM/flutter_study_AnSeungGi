@@ -1,7 +1,9 @@
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/button.dart';
 import 'package:flutter_app/quiz.dart';
 import 'package:flutter_app/textbox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Components extends StatefulWidget {
   const Components({super.key});
@@ -11,8 +13,14 @@ class Components extends StatefulWidget {
 }
 
 class _ComponentsState extends State<Components> {
-  //late Quiz quiz;
+  
   Future<Quiz>? quiz;
+  //FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference data = FirebaseFirestore.instance.collection('quiz');
+  Future<void> addData() async {
+  final q = await quiz; // quiz는 Future<Quiz> 타입
+  await data.add(q!.toMap()); // Map 형태로 변환해서 저장
+}
 
   @override
   void initState(){
@@ -26,6 +34,7 @@ class _ComponentsState extends State<Components> {
   }
   void onPressed(String selectedAnswer, String correctAnswer, BuildContext context) {
     if (selectedAnswer == correctAnswer) {
+      addData();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Center(
@@ -87,6 +96,7 @@ class _ComponentsState extends State<Components> {
             return Center(child: Text('No data'));
           } else {
             final quiz = snapshot.data;
+            //print(quiz);
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
