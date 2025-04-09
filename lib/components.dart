@@ -68,9 +68,12 @@ class _ComponentsState extends State<Components> {
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
         ),
         actions: [
-         IconButton(onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (_) => Loginscreen()));
-        }, icon: Icon(Icons.perm_identity)),
+         IconButton(
+  onPressed: () {
+    Navigator.pushNamed(context, '/sign-in'); // ✅ 라우트로 이동
+  },
+  icon: Icon(Icons.perm_identity),
+),
         ],
       ),
       body: FutureBuilder<Quiz>(
