@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/button.dart';
 import 'package:flutter_app/quiz.dart';
+import 'package:flutter_app/screen/loginscreen.dart';
 import 'package:flutter_app/textbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -66,6 +67,11 @@ class _ComponentsState extends State<Components> {
           '랜덤 퀴즈',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
         ),
+        actions: [
+         IconButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (_) => Loginscreen()));
+        }, icon: Icon(Icons.perm_identity)),
+        ],
       ),
       body: FutureBuilder<Quiz>(
         future: quiz,
