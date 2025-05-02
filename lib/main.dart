@@ -3,7 +3,6 @@ import 'package:flutter_app/components.dart';
 import 'package:flutter_app/screen/loginscreen.dart';
 import 'package:flutter_app/profile.dart'; // 새로 만든 파일
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'firebase_options.dart';
 

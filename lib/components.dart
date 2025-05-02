@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/button.dart';
 import 'package:flutter_app/quiz.dart';
-import 'package:flutter_app/screen/loginscreen.dart';
 import 'package:flutter_app/textbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
