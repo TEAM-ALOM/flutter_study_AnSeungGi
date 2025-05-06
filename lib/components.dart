@@ -15,28 +15,28 @@ class Components extends StatefulWidget {
 class _ComponentsState extends State<Components> {
   Future<Quiz>? quiz;
   //FirebaseFirestore firestore = FirebaseFirestore.instance;
-  
+
   Future<void> addData() async {
     final q = await quiz;
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null || q == null) return;
-
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.uid)
-      .collection('correct')
-      .add(q.toMap());
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || q == null) return;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('correct')
+        .add(q.toMap());
   }
+
   Future<void> addWData() async {
     final q = await quiz;
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null || q == null) return;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || q == null) return;
 
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.uid)
-      .collection('wrong')
-      .add(q.toMap());
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('wrong')
+        .add(q.toMap());
   }
 
   @override
