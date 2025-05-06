@@ -22,7 +22,7 @@ class App extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const Components(),
-        '/wrong' : (context) => const Wrongnotescreen(),
+        '/wronganswers' : (context) => const Wrongnotescreen(),
         '/sign-in': (context) => const Loginscreen(),
         '/profile': (context) => const ProfilePage(),
       },

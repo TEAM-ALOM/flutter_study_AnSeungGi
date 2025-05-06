@@ -28,7 +28,7 @@ Future<Quiz> fetching() async {
   }
 
   final data = json.decode(response.body);
-  //(data);
+
   final result = data['results'][0];
 
   String question = result['question'];

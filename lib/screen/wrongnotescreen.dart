@@ -13,12 +13,11 @@ class _WrongnotescreenState extends State<Wrongnotescreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '오답',
+          '오답 List',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
         ),
         
       ),
-      
     );
   }
 }

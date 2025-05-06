@@ -1,9 +1,9 @@
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/button.dart';
 import 'package:flutter_app/quiz.dart';
 import 'package:flutter_app/textbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Components extends StatefulWidget {
   const Components({super.key});
@@ -15,10 +15,28 @@ class Components extends StatefulWidget {
 class _ComponentsState extends State<Components> {
   Future<Quiz>? quiz;
   //FirebaseFirestore firestore = FirebaseFirestore.instance;
-  CollectionReference data = FirebaseFirestore.instance.collection('quiz');
+  
   Future<void> addData() async {
-    final q = await quiz; // quiz는 Future<Quiz> 타입
-    await data.add(q!.toMap()); // Map 형태로 변환해서 저장
+    final q = await quiz;
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null || q == null) return;
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('correct')
+      .add(q.toMap());
+  }
+  Future<void> addWData() async {
+    final q = await quiz;
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null || q == null) return;
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('wrong')
+      .add(q.toMap());
   }
 
   @override
@@ -47,8 +65,8 @@ class _ComponentsState extends State<Components> {
           duration: Duration(milliseconds: 100),
         ),
       );
-      loadQuiz();
     } else {
+      addWData();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Center(child: Text('Wrong!')),
@@ -57,6 +75,7 @@ class _ComponentsState extends State<Components> {
         ),
       );
     }
+    loadQuiz();
   }
 
   @override
@@ -67,13 +86,21 @@ class _ComponentsState extends State<Components> {
           '랜덤 퀴즈',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
         ),
-        leading: IconButton(onPressed: () {
-           Navigator.pushNamed(context, '/wrong');
-        }, icon: Icon(Icons.dataset)),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/wronganswers');
+          },
+          icon: Icon(Icons.dataset),
+        ),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/sign-in');
+              final user = FirebaseAuth.instance.currentUser;
+              if (user == null) {
+                Navigator.pushNamed(context, '/sign-in');
+              } else {
+                Navigator.pushNamed(context, '/profile');
+              }
             },
             icon: Icon(Icons.perm_identity),
           ),
