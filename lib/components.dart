@@ -1,9 +1,9 @@
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/button.dart';
 import 'package:flutter_app/quiz.dart';
 import 'package:flutter_app/textbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Components extends StatefulWidget {
   const Components({super.key});
@@ -13,49 +13,69 @@ class Components extends StatefulWidget {
 }
 
 class _ComponentsState extends State<Components> {
-  
   Future<Quiz>? quiz;
   //FirebaseFirestore firestore = FirebaseFirestore.instance;
-  CollectionReference data = FirebaseFirestore.instance.collection('quiz');
+
   Future<void> addData() async {
-  final q = await quiz; // quiz는 Future<Quiz> 타입
-  await data.add(q!.toMap()); // Map 형태로 변환해서 저장
-}
+    final q = await quiz;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || q == null) return;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('correct')
+        .add(q.toMap());
+  }
+
+  Future<void> addWData() async {
+    final q = await quiz;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || q == null) return;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('wrong')
+        .add(q.toMap());
+  }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadQuiz();
   }
+
   void loadQuiz() async {
     setState(() {
       quiz = fetching();
     });
   }
-  void onPressed(String selectedAnswer, String correctAnswer, BuildContext context) {
+
+  void onPressed(
+    String selectedAnswer,
+    String correctAnswer,
+    BuildContext context,
+  ) {
     if (selectedAnswer == correctAnswer) {
       addData();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Center(
-            child: Text('Correct!')
-            ),
+          content: Center(child: Text('Correct!')),
           backgroundColor: Colors.green,
           duration: Duration(milliseconds: 100),
         ),
       );
-      loadQuiz();
     } else {
+      addWData();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Center(
-            child: Text('Wrong!')
-            ),
+          content: Center(child: Text('Wrong!')),
           backgroundColor: Colors.red,
-          duration: Duration(milliseconds:100),
+          duration: Duration(milliseconds: 100),
         ),
       );
     }
+    loadQuiz();
   }
 
   @override
@@ -66,18 +86,29 @@ class _ComponentsState extends State<Components> {
           '랜덤 퀴즈',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
         ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/wronganswers');
+          },
+          icon: Icon(Icons.dataset),
+        ),
         actions: [
-         IconButton(
-  onPressed: () {
-    Navigator.pushNamed(context, '/sign-in'); // ✅ 라우트로 이동
-  },
-  icon: Icon(Icons.perm_identity),
-),
+          IconButton(
+            onPressed: () {
+              final user = FirebaseAuth.instance.currentUser;
+              if (user == null) {
+                Navigator.pushNamed(context, '/sign-in');
+              } else {
+                Navigator.pushNamed(context, '/profile');
+              }
+            },
+            icon: Icon(Icons.perm_identity),
+          ),
         ],
       ),
       body: FutureBuilder<Quiz>(
         future: quiz,
-        builder: (context,snapshot){
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -86,7 +117,10 @@ class _ComponentsState extends State<Components> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Error: ${snapshot.error}', style: TextStyle(fontSize: 20)),
+                  Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 20),
+                  ),
                   SizedBox(height: 20),
                   Button(
                     text: '새로 고침',
@@ -107,20 +141,26 @@ class _ComponentsState extends State<Components> {
             //print(quiz);
             return SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 100,
-                    ),
+                    SizedBox(height: 100),
                     Textbox(question: quiz!.question),
-                    for(int i = 0; i < 4; i++)
+                    for (int i = 0; i < 4; i++)
                       Button(
                         text: quiz.answers[i],
                         flag: false,
                         isCo: quiz.answers[i] == quiz.coanswer,
-                        onPressed: () => onPressed(quiz.answers[i], quiz.coanswer,context)
+                        onPressed:
+                            () => onPressed(
+                              quiz.answers[i],
+                              quiz.coanswer,
+                              context,
+                            ),
                       ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -138,11 +178,10 @@ class _ComponentsState extends State<Components> {
                 ),
               ),
             );
-            }
+          }
         },
       ),
-       backgroundColor: Color(0xFFFFF5FD),
+      backgroundColor: Color(0xFFFFF5FD),
     );
   }
 }
-

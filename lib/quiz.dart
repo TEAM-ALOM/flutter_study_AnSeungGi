@@ -6,12 +6,17 @@ class Quiz {
   List<String> answers = [];
   String coanswer = '';
   Quiz({required this.answers, required this.question, required this.coanswer});
-   Map<String, dynamic> toMap() {
-    return {
-      'question': question,
-      'answers': answers,
-      'coanswer': coanswer,
-    };
+  Map<String, dynamic> toMap() {
+    return {'question': question, 'answers': answers, 'coanswer': coanswer};
+  }
+
+  factory Quiz.fromMap(Map<String, dynamic> map) {
+    return Quiz(
+      
+      answers: List<String>.from(map['answers'] ?? []),
+      coanswer: map['coanswer'] ?? '',
+      question: map['question'] ?? '',
+    );
   }
   @override
   String toString() {
@@ -28,14 +33,14 @@ Future<Quiz> fetching() async {
   }
 
   final data = json.decode(response.body);
-  //(data);
+
   final result = data['results'][0];
 
   String question = result['question'];
   List<String> answers = List<String>.from(result['incorrect_answers']);
   String coanswer = result['correct_answer'];
-  List<String> anlist = [...answers,coanswer];
+  List<String> anlist = [...answers, coanswer];
   anlist.shuffle();
-  
+
   return Quiz(question: question, answers: anlist, coanswer: coanswer);
 }
