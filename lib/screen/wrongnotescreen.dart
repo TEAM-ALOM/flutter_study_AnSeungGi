@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/button.dart';
 import 'package:flutter_app/quiz.dart';
 
 class Wrongnotescreen extends StatefulWidget {
@@ -70,7 +71,30 @@ class _WrongnotescreenState extends State<Wrongnotescreen> {
           return ListView.builder(
             itemCount: quiz.length,
             itemBuilder: (context, index) {
-              return ListTile(title: Text(quiz[index].question));
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
+                child: Button(
+                  text: '${index + 1} ${quiz[index].question}',
+                  flag: false,
+                  isCo: false,
+                  onPressed: () {
+                    print(index);
+                    Navigator.pushNamed(
+                      context,
+                      '/secondchance',
+                      arguments: quiz[index],
+                    ).then((_) {
+                      // 돌아왔을 때 상태 갱신
+                      setState(() {
+                        wrongQuestions = fetchWrongQuestions();
+                      });
+                    });
+                  },
+                ),
+              ); //ListTile(title: Text(quiz[index].question));
             },
           );
         },
