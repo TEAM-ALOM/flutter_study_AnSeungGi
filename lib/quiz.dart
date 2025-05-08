@@ -43,5 +43,5 @@ Future<Quiz> fetching() async {
   List<String> anlist = [...answers, coanswer];
   anlist.shuffle();
 
-  return Quiz(question: question, answers: anlist, coanswer: coanswer);
+  return Quiz(question: question, answers: anlist, coanswer: coanswer);// 카테고리 추가 필요
 }
