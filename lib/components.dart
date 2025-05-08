@@ -4,6 +4,7 @@ import 'package:flutter_app/quiz.dart';
 import 'package:flutter_app/textbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 
 class Components extends StatefulWidget {
   const Components({super.key});
@@ -148,7 +149,21 @@ class _ComponentsState extends State<Components> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 100),
+                    CircularCountDownTimer(
+                      duration: 10,
+                      width: 100,
+                      height: 100,
+                      fillColor: Color.fromRGBO(232, 157, 157, 1),
+                      ringColor: Color.fromRGBO(0, 0, 0, 0),
+                      isReverse: true,
+                      isReverseAnimation: true,
+                      onComplete: () {
+                        addWData();
+                        // Here, do whatever you want
+                        loadQuiz();
+                      },
+                    ),
+                    SizedBox(height: 50),
                     Textbox(question: quiz!.question),
                     for (int i = 0; i < 4; i++)
                       Button(

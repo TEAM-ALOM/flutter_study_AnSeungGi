@@ -87,7 +87,6 @@ class _WrongnotescreenState extends State<Wrongnotescreen> {
                       '/secondchance',
                       arguments: quiz[index],
                     ).then((_) {
-                      // 돌아왔을 때 상태 갱신
                       setState(() {
                         wrongQuestions = fetchWrongQuestions();
                       });

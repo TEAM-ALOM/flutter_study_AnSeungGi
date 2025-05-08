@@ -5,14 +5,15 @@ class Quiz {
   String question = '';
   List<String> answers = [];
   String coanswer = '';
-  Quiz({required this.answers, required this.question, required this.coanswer});
+  String category = '';
+  Quiz({required this.answers, required this.question, required this.coanswer, required this.category});
   Map<String, dynamic> toMap() {
     return {'question': question, 'answers': answers, 'coanswer': coanswer};
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
     return Quiz(
-      
+      category: map['category'] ?? '',
       answers: List<String>.from(map['answers'] ?? []),
       coanswer: map['coanswer'] ?? '',
       question: map['question'] ?? '',
